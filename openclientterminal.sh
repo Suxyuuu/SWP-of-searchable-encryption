@@ -1,0 +1,1 @@
+deepin-terminal -w "/home/suu/Documents/VScode/bishe" -e "sh run_client.sh" --keep-open

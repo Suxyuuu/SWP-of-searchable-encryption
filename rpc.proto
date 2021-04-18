@@ -1,0 +1,58 @@
+syntax="proto3";
+
+// request
+message SetupRequestMessage{
+    string setup_request=1;
+    string setup_request2=2;
+}
+
+message SearchRequestMessage{
+    bool is_key=1;
+    string search_request=2;
+}
+
+message AddRequestMessage{
+    string add_request_key=1;
+    string add_request_value=2;
+}
+
+message DeleteRequestMessage{
+    bool is_key=1;
+    string delete_request=2;
+}
+
+message ShowAllRequestMessage{
+    string showall_request=1;
+}
+
+
+// response
+message SetupResponseMessage{
+    string setup_response=1;
+}
+
+message SearchResponseMessage{
+    repeated string search_response=1;
+}
+
+message AddResponseMessage{
+    string add_response=1;
+}
+
+message DeleteResponseMessage{
+    repeated string delete_response=1;
+}
+
+message ShowAllResponseMessage{
+    repeated string showall_response=1;
+}
+
+
+// rpc
+service RPC {
+    rpc setup (SetupRequestMessage) returns (SetupResponseMessage);
+    rpc search (SearchRequestMessage) returns (SearchResponseMessage);
+    rpc add_data (AddRequestMessage) returns (AddResponseMessage);
+    rpc delete_data (DeleteRequestMessage) returns (DeleteResponseMessage);
+    rpc show_all (ShowAllRequestMessage) returns (ShowAllResponseMessage);
+}
