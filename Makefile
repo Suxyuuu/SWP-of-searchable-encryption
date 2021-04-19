@@ -11,7 +11,7 @@ CC = g++
  
 all: client server
  
-client:	rpc.grpc.pb.o rpc.pb.o client.o
+client:	rpc.grpc.pb.o rpc.pb.o client.o encryption.o
 	$(CC) $^ -L/usr/local/lib `pkg-config --libs grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -lprotobuf -lpthread -lrocksdb -ldl -lssl -o $@
  
 server:	rpc.grpc.pb.o rpc.pb.o server.o
@@ -19,4 +19,4 @@ server:	rpc.grpc.pb.o rpc.pb.o server.o
 #chmod 777 $@
 
 clean:
-	sudo rm *.o
+	rm *.o

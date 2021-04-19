@@ -3,7 +3,6 @@ syntax="proto3";
 // request
 message SetupRequestMessage{
     string setup_request=1;
-    string setup_request2=2;
 }
 
 message SearchRequestMessage{
@@ -25,6 +24,18 @@ message ShowAllRequestMessage{
     string showall_request=1;
 }
 
+message RandomGenerateDBRequestMessage{
+    repeated string gen_request_key=1;
+    repeated string gen_request_value=2;
+}
+
+message ClearRequestMessage{
+    string clear_request=1;
+}
+
+message DestroyRequestMessage{
+    string destroy_request=1;
+}
 
 // response
 message SetupResponseMessage{
@@ -47,6 +58,18 @@ message ShowAllResponseMessage{
     repeated string showall_response=1;
 }
 
+message RandomGenerateDBResponseMessage{
+    string gen_response=1;
+}
+
+message ClearResponseMessage{
+    string clear_response=1;
+}
+
+message DestroyResponseMessage{
+    string destroy_response=1;
+}
+
 
 // rpc
 service RPC {
@@ -55,4 +78,7 @@ service RPC {
     rpc add_data (AddRequestMessage) returns (AddResponseMessage);
     rpc delete_data (DeleteRequestMessage) returns (DeleteResponseMessage);
     rpc show_all (ShowAllRequestMessage) returns (ShowAllResponseMessage);
+    rpc RanGenDB (RandomGenerateDBRequestMessage) returns (RandomGenerateDBResponseMessage);
+    rpc ClearDB (ClearRequestMessage) returns (ClearResponseMessage);
+    rpc DestroyDB (DestroyRequestMessage) returns (DestroyResponseMessage);
 }

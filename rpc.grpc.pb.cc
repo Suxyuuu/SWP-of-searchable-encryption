@@ -26,6 +26,9 @@ static const char* RPC_method_names[] = {
   "/RPC/add_data",
   "/RPC/delete_data",
   "/RPC/show_all",
+  "/RPC/RanGenDB",
+  "/RPC/ClearDB",
+  "/RPC/DestroyDB",
 };
 
 std::unique_ptr< RPC::Stub> RPC::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -40,6 +43,9 @@ RPC::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
   , rpcmethod_add_data_(RPC_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_delete_data_(RPC_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_show_all_(RPC_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_RanGenDB_(RPC_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ClearDB_(RPC_method_names[6], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DestroyDB_(RPC_method_names[7], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status RPC::Stub::setup(::grpc::ClientContext* context, const ::SetupRequestMessage& request, ::SetupResponseMessage* response) {
@@ -157,6 +163,75 @@ void RPC::Stub::experimental_async::show_all(::grpc::ClientContext* context, con
   return result;
 }
 
+::grpc::Status RPC::Stub::RanGenDB(::grpc::ClientContext* context, const ::RandomGenerateDBRequestMessage& request, ::RandomGenerateDBResponseMessage* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::RandomGenerateDBRequestMessage, ::RandomGenerateDBResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RanGenDB_, context, request, response);
+}
+
+void RPC::Stub::experimental_async::RanGenDB(::grpc::ClientContext* context, const ::RandomGenerateDBRequestMessage* request, ::RandomGenerateDBResponseMessage* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::RandomGenerateDBRequestMessage, ::RandomGenerateDBResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RanGenDB_, context, request, response, std::move(f));
+}
+
+void RPC::Stub::experimental_async::RanGenDB(::grpc::ClientContext* context, const ::RandomGenerateDBRequestMessage* request, ::RandomGenerateDBResponseMessage* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RanGenDB_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::RandomGenerateDBResponseMessage>* RPC::Stub::PrepareAsyncRanGenDBRaw(::grpc::ClientContext* context, const ::RandomGenerateDBRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::RandomGenerateDBResponseMessage, ::RandomGenerateDBRequestMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RanGenDB_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::RandomGenerateDBResponseMessage>* RPC::Stub::AsyncRanGenDBRaw(::grpc::ClientContext* context, const ::RandomGenerateDBRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncRanGenDBRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status RPC::Stub::ClearDB(::grpc::ClientContext* context, const ::ClearRequestMessage& request, ::ClearResponseMessage* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::ClearRequestMessage, ::ClearResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ClearDB_, context, request, response);
+}
+
+void RPC::Stub::experimental_async::ClearDB(::grpc::ClientContext* context, const ::ClearRequestMessage* request, ::ClearResponseMessage* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::ClearRequestMessage, ::ClearResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ClearDB_, context, request, response, std::move(f));
+}
+
+void RPC::Stub::experimental_async::ClearDB(::grpc::ClientContext* context, const ::ClearRequestMessage* request, ::ClearResponseMessage* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ClearDB_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::ClearResponseMessage>* RPC::Stub::PrepareAsyncClearDBRaw(::grpc::ClientContext* context, const ::ClearRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::ClearResponseMessage, ::ClearRequestMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ClearDB_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::ClearResponseMessage>* RPC::Stub::AsyncClearDBRaw(::grpc::ClientContext* context, const ::ClearRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncClearDBRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status RPC::Stub::DestroyDB(::grpc::ClientContext* context, const ::DestroyRequestMessage& request, ::DestroyResponseMessage* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::DestroyRequestMessage, ::DestroyResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_DestroyDB_, context, request, response);
+}
+
+void RPC::Stub::experimental_async::DestroyDB(::grpc::ClientContext* context, const ::DestroyRequestMessage* request, ::DestroyResponseMessage* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::DestroyRequestMessage, ::DestroyResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DestroyDB_, context, request, response, std::move(f));
+}
+
+void RPC::Stub::experimental_async::DestroyDB(::grpc::ClientContext* context, const ::DestroyRequestMessage* request, ::DestroyResponseMessage* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DestroyDB_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::DestroyResponseMessage>* RPC::Stub::PrepareAsyncDestroyDBRaw(::grpc::ClientContext* context, const ::DestroyRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::DestroyResponseMessage, ::DestroyRequestMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_DestroyDB_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::DestroyResponseMessage>* RPC::Stub::AsyncDestroyDBRaw(::grpc::ClientContext* context, const ::DestroyRequestMessage& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncDestroyDBRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 RPC::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       RPC_method_names[0],
@@ -208,6 +283,36 @@ RPC::Service::Service() {
              ::ShowAllResponseMessage* resp) {
                return service->show_all(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      RPC_method_names[5],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< RPC::Service, ::RandomGenerateDBRequestMessage, ::RandomGenerateDBResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](RPC::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::RandomGenerateDBRequestMessage* req,
+             ::RandomGenerateDBResponseMessage* resp) {
+               return service->RanGenDB(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      RPC_method_names[6],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< RPC::Service, ::ClearRequestMessage, ::ClearResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](RPC::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::ClearRequestMessage* req,
+             ::ClearResponseMessage* resp) {
+               return service->ClearDB(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      RPC_method_names[7],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< RPC::Service, ::DestroyRequestMessage, ::DestroyResponseMessage, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](RPC::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::DestroyRequestMessage* req,
+             ::DestroyResponseMessage* resp) {
+               return service->DestroyDB(ctx, req, resp);
+             }, this)));
 }
 
 RPC::Service::~Service() {
@@ -242,6 +347,27 @@ RPC::Service::~Service() {
 }
 
 ::grpc::Status RPC::Service::show_all(::grpc::ServerContext* context, const ::ShowAllRequestMessage* request, ::ShowAllResponseMessage* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status RPC::Service::RanGenDB(::grpc::ServerContext* context, const ::RandomGenerateDBRequestMessage* request, ::RandomGenerateDBResponseMessage* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status RPC::Service::ClearDB(::grpc::ServerContext* context, const ::ClearRequestMessage* request, ::ClearResponseMessage* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status RPC::Service::DestroyDB(::grpc::ServerContext* context, const ::DestroyRequestMessage* request, ::DestroyResponseMessage* response) {
   (void) context;
   (void) request;
   (void) response;

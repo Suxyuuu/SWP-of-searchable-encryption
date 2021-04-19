@@ -46,7 +46,7 @@ struct TableStruct_rpc_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[16]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,12 +59,30 @@ extern AddRequestMessageDefaultTypeInternal _AddRequestMessage_default_instance_
 class AddResponseMessage;
 class AddResponseMessageDefaultTypeInternal;
 extern AddResponseMessageDefaultTypeInternal _AddResponseMessage_default_instance_;
+class ClearRequestMessage;
+class ClearRequestMessageDefaultTypeInternal;
+extern ClearRequestMessageDefaultTypeInternal _ClearRequestMessage_default_instance_;
+class ClearResponseMessage;
+class ClearResponseMessageDefaultTypeInternal;
+extern ClearResponseMessageDefaultTypeInternal _ClearResponseMessage_default_instance_;
 class DeleteRequestMessage;
 class DeleteRequestMessageDefaultTypeInternal;
 extern DeleteRequestMessageDefaultTypeInternal _DeleteRequestMessage_default_instance_;
 class DeleteResponseMessage;
 class DeleteResponseMessageDefaultTypeInternal;
 extern DeleteResponseMessageDefaultTypeInternal _DeleteResponseMessage_default_instance_;
+class DestroyRequestMessage;
+class DestroyRequestMessageDefaultTypeInternal;
+extern DestroyRequestMessageDefaultTypeInternal _DestroyRequestMessage_default_instance_;
+class DestroyResponseMessage;
+class DestroyResponseMessageDefaultTypeInternal;
+extern DestroyResponseMessageDefaultTypeInternal _DestroyResponseMessage_default_instance_;
+class RandomGenerateDBRequestMessage;
+class RandomGenerateDBRequestMessageDefaultTypeInternal;
+extern RandomGenerateDBRequestMessageDefaultTypeInternal _RandomGenerateDBRequestMessage_default_instance_;
+class RandomGenerateDBResponseMessage;
+class RandomGenerateDBResponseMessageDefaultTypeInternal;
+extern RandomGenerateDBResponseMessageDefaultTypeInternal _RandomGenerateDBResponseMessage_default_instance_;
 class SearchRequestMessage;
 class SearchRequestMessageDefaultTypeInternal;
 extern SearchRequestMessageDefaultTypeInternal _SearchRequestMessage_default_instance_;
@@ -86,8 +104,14 @@ extern ShowAllResponseMessageDefaultTypeInternal _ShowAllResponseMessage_default
 PROTOBUF_NAMESPACE_OPEN
 template<> ::AddRequestMessage* Arena::CreateMaybeMessage<::AddRequestMessage>(Arena*);
 template<> ::AddResponseMessage* Arena::CreateMaybeMessage<::AddResponseMessage>(Arena*);
+template<> ::ClearRequestMessage* Arena::CreateMaybeMessage<::ClearRequestMessage>(Arena*);
+template<> ::ClearResponseMessage* Arena::CreateMaybeMessage<::ClearResponseMessage>(Arena*);
 template<> ::DeleteRequestMessage* Arena::CreateMaybeMessage<::DeleteRequestMessage>(Arena*);
 template<> ::DeleteResponseMessage* Arena::CreateMaybeMessage<::DeleteResponseMessage>(Arena*);
+template<> ::DestroyRequestMessage* Arena::CreateMaybeMessage<::DestroyRequestMessage>(Arena*);
+template<> ::DestroyResponseMessage* Arena::CreateMaybeMessage<::DestroyResponseMessage>(Arena*);
+template<> ::RandomGenerateDBRequestMessage* Arena::CreateMaybeMessage<::RandomGenerateDBRequestMessage>(Arena*);
+template<> ::RandomGenerateDBResponseMessage* Arena::CreateMaybeMessage<::RandomGenerateDBResponseMessage>(Arena*);
 template<> ::SearchRequestMessage* Arena::CreateMaybeMessage<::SearchRequestMessage>(Arena*);
 template<> ::SearchResponseMessage* Arena::CreateMaybeMessage<::SearchResponseMessage>(Arena*);
 template<> ::SetupRequestMessage* Arena::CreateMaybeMessage<::SetupRequestMessage>(Arena*);
@@ -211,7 +235,6 @@ class SetupRequestMessage PROTOBUF_FINAL :
 
   enum : int {
     kSetupRequestFieldNumber = 1,
-    kSetupRequest2FieldNumber = 2,
   };
   // string setup_request = 1;
   void clear_setup_request();
@@ -229,22 +252,6 @@ class SetupRequestMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_setup_request();
   public:
 
-  // string setup_request2 = 2;
-  void clear_setup_request2();
-  const std::string& setup_request2() const;
-  void set_setup_request2(const std::string& value);
-  void set_setup_request2(std::string&& value);
-  void set_setup_request2(const char* value);
-  void set_setup_request2(const char* value, size_t size);
-  std::string* mutable_setup_request2();
-  std::string* release_setup_request2();
-  void set_allocated_setup_request2(std::string* setup_request2);
-  private:
-  const std::string& _internal_setup_request2() const;
-  void _internal_set_setup_request2(const std::string& value);
-  std::string* _internal_mutable_setup_request2();
-  public:
-
   // @@protoc_insertion_point(class_scope:SetupRequestMessage)
  private:
   class _Internal;
@@ -253,7 +260,6 @@ class SetupRequestMessage PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr setup_request_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr setup_request2_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_rpc_2eproto;
 };
@@ -871,6 +877,469 @@ class ShowAllRequestMessage PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class RandomGenerateDBRequestMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RandomGenerateDBRequestMessage) */ {
+ public:
+  inline RandomGenerateDBRequestMessage() : RandomGenerateDBRequestMessage(nullptr) {}
+  virtual ~RandomGenerateDBRequestMessage();
+
+  RandomGenerateDBRequestMessage(const RandomGenerateDBRequestMessage& from);
+  RandomGenerateDBRequestMessage(RandomGenerateDBRequestMessage&& from) noexcept
+    : RandomGenerateDBRequestMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline RandomGenerateDBRequestMessage& operator=(const RandomGenerateDBRequestMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RandomGenerateDBRequestMessage& operator=(RandomGenerateDBRequestMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RandomGenerateDBRequestMessage& default_instance();
+
+  static inline const RandomGenerateDBRequestMessage* internal_default_instance() {
+    return reinterpret_cast<const RandomGenerateDBRequestMessage*>(
+               &_RandomGenerateDBRequestMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(RandomGenerateDBRequestMessage& a, RandomGenerateDBRequestMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RandomGenerateDBRequestMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RandomGenerateDBRequestMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RandomGenerateDBRequestMessage* New() const final {
+    return CreateMaybeMessage<RandomGenerateDBRequestMessage>(nullptr);
+  }
+
+  RandomGenerateDBRequestMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RandomGenerateDBRequestMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RandomGenerateDBRequestMessage& from);
+  void MergeFrom(const RandomGenerateDBRequestMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RandomGenerateDBRequestMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RandomGenerateDBRequestMessage";
+  }
+  protected:
+  explicit RandomGenerateDBRequestMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGenRequestKeyFieldNumber = 1,
+    kGenRequestValueFieldNumber = 2,
+  };
+  // repeated string gen_request_key = 1;
+  int gen_request_key_size() const;
+  private:
+  int _internal_gen_request_key_size() const;
+  public:
+  void clear_gen_request_key();
+  const std::string& gen_request_key(int index) const;
+  std::string* mutable_gen_request_key(int index);
+  void set_gen_request_key(int index, const std::string& value);
+  void set_gen_request_key(int index, std::string&& value);
+  void set_gen_request_key(int index, const char* value);
+  void set_gen_request_key(int index, const char* value, size_t size);
+  std::string* add_gen_request_key();
+  void add_gen_request_key(const std::string& value);
+  void add_gen_request_key(std::string&& value);
+  void add_gen_request_key(const char* value);
+  void add_gen_request_key(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& gen_request_key() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_gen_request_key();
+  private:
+  const std::string& _internal_gen_request_key(int index) const;
+  std::string* _internal_add_gen_request_key();
+  public:
+
+  // repeated string gen_request_value = 2;
+  int gen_request_value_size() const;
+  private:
+  int _internal_gen_request_value_size() const;
+  public:
+  void clear_gen_request_value();
+  const std::string& gen_request_value(int index) const;
+  std::string* mutable_gen_request_value(int index);
+  void set_gen_request_value(int index, const std::string& value);
+  void set_gen_request_value(int index, std::string&& value);
+  void set_gen_request_value(int index, const char* value);
+  void set_gen_request_value(int index, const char* value, size_t size);
+  std::string* add_gen_request_value();
+  void add_gen_request_value(const std::string& value);
+  void add_gen_request_value(std::string&& value);
+  void add_gen_request_value(const char* value);
+  void add_gen_request_value(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& gen_request_value() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_gen_request_value();
+  private:
+  const std::string& _internal_gen_request_value(int index) const;
+  std::string* _internal_add_gen_request_value();
+  public:
+
+  // @@protoc_insertion_point(class_scope:RandomGenerateDBRequestMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> gen_request_key_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> gen_request_value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ClearRequestMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ClearRequestMessage) */ {
+ public:
+  inline ClearRequestMessage() : ClearRequestMessage(nullptr) {}
+  virtual ~ClearRequestMessage();
+
+  ClearRequestMessage(const ClearRequestMessage& from);
+  ClearRequestMessage(ClearRequestMessage&& from) noexcept
+    : ClearRequestMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline ClearRequestMessage& operator=(const ClearRequestMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ClearRequestMessage& operator=(ClearRequestMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ClearRequestMessage& default_instance();
+
+  static inline const ClearRequestMessage* internal_default_instance() {
+    return reinterpret_cast<const ClearRequestMessage*>(
+               &_ClearRequestMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(ClearRequestMessage& a, ClearRequestMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ClearRequestMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ClearRequestMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ClearRequestMessage* New() const final {
+    return CreateMaybeMessage<ClearRequestMessage>(nullptr);
+  }
+
+  ClearRequestMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ClearRequestMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ClearRequestMessage& from);
+  void MergeFrom(const ClearRequestMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ClearRequestMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ClearRequestMessage";
+  }
+  protected:
+  explicit ClearRequestMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kClearRequestFieldNumber = 1,
+  };
+  // string clear_request = 1;
+  void clear_clear_request();
+  const std::string& clear_request() const;
+  void set_clear_request(const std::string& value);
+  void set_clear_request(std::string&& value);
+  void set_clear_request(const char* value);
+  void set_clear_request(const char* value, size_t size);
+  std::string* mutable_clear_request();
+  std::string* release_clear_request();
+  void set_allocated_clear_request(std::string* clear_request);
+  private:
+  const std::string& _internal_clear_request() const;
+  void _internal_set_clear_request(const std::string& value);
+  std::string* _internal_mutable_clear_request();
+  public:
+
+  // @@protoc_insertion_point(class_scope:ClearRequestMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr clear_request_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DestroyRequestMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DestroyRequestMessage) */ {
+ public:
+  inline DestroyRequestMessage() : DestroyRequestMessage(nullptr) {}
+  virtual ~DestroyRequestMessage();
+
+  DestroyRequestMessage(const DestroyRequestMessage& from);
+  DestroyRequestMessage(DestroyRequestMessage&& from) noexcept
+    : DestroyRequestMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline DestroyRequestMessage& operator=(const DestroyRequestMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DestroyRequestMessage& operator=(DestroyRequestMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const DestroyRequestMessage& default_instance();
+
+  static inline const DestroyRequestMessage* internal_default_instance() {
+    return reinterpret_cast<const DestroyRequestMessage*>(
+               &_DestroyRequestMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(DestroyRequestMessage& a, DestroyRequestMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DestroyRequestMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DestroyRequestMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DestroyRequestMessage* New() const final {
+    return CreateMaybeMessage<DestroyRequestMessage>(nullptr);
+  }
+
+  DestroyRequestMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DestroyRequestMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DestroyRequestMessage& from);
+  void MergeFrom(const DestroyRequestMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DestroyRequestMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DestroyRequestMessage";
+  }
+  protected:
+  explicit DestroyRequestMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDestroyRequestFieldNumber = 1,
+  };
+  // string destroy_request = 1;
+  void clear_destroy_request();
+  const std::string& destroy_request() const;
+  void set_destroy_request(const std::string& value);
+  void set_destroy_request(std::string&& value);
+  void set_destroy_request(const char* value);
+  void set_destroy_request(const char* value, size_t size);
+  std::string* mutable_destroy_request();
+  std::string* release_destroy_request();
+  void set_allocated_destroy_request(std::string* destroy_request);
+  private:
+  const std::string& _internal_destroy_request() const;
+  void _internal_set_destroy_request(const std::string& value);
+  std::string* _internal_mutable_destroy_request();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DestroyRequestMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr destroy_request_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
 class SetupResponseMessage PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SetupResponseMessage) */ {
  public:
@@ -912,7 +1381,7 @@ class SetupResponseMessage PROTOBUF_FINAL :
                &_SetupResponseMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    8;
 
   friend void swap(SetupResponseMessage& a, SetupResponseMessage& b) {
     a.Swap(&b);
@@ -1055,7 +1524,7 @@ class SearchResponseMessage PROTOBUF_FINAL :
                &_SearchResponseMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    9;
 
   friend void swap(SearchResponseMessage& a, SearchResponseMessage& b) {
     a.Swap(&b);
@@ -1206,7 +1675,7 @@ class AddResponseMessage PROTOBUF_FINAL :
                &_AddResponseMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    10;
 
   friend void swap(AddResponseMessage& a, AddResponseMessage& b) {
     a.Swap(&b);
@@ -1349,7 +1818,7 @@ class DeleteResponseMessage PROTOBUF_FINAL :
                &_DeleteResponseMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    11;
 
   friend void swap(DeleteResponseMessage& a, DeleteResponseMessage& b) {
     a.Swap(&b);
@@ -1500,7 +1969,7 @@ class ShowAllResponseMessage PROTOBUF_FINAL :
                &_ShowAllResponseMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    12;
 
   friend void swap(ShowAllResponseMessage& a, ShowAllResponseMessage& b) {
     a.Swap(&b);
@@ -1608,6 +2077,435 @@ class ShowAllResponseMessage PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_rpc_2eproto;
 };
+// -------------------------------------------------------------------
+
+class RandomGenerateDBResponseMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RandomGenerateDBResponseMessage) */ {
+ public:
+  inline RandomGenerateDBResponseMessage() : RandomGenerateDBResponseMessage(nullptr) {}
+  virtual ~RandomGenerateDBResponseMessage();
+
+  RandomGenerateDBResponseMessage(const RandomGenerateDBResponseMessage& from);
+  RandomGenerateDBResponseMessage(RandomGenerateDBResponseMessage&& from) noexcept
+    : RandomGenerateDBResponseMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline RandomGenerateDBResponseMessage& operator=(const RandomGenerateDBResponseMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RandomGenerateDBResponseMessage& operator=(RandomGenerateDBResponseMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RandomGenerateDBResponseMessage& default_instance();
+
+  static inline const RandomGenerateDBResponseMessage* internal_default_instance() {
+    return reinterpret_cast<const RandomGenerateDBResponseMessage*>(
+               &_RandomGenerateDBResponseMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(RandomGenerateDBResponseMessage& a, RandomGenerateDBResponseMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RandomGenerateDBResponseMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RandomGenerateDBResponseMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RandomGenerateDBResponseMessage* New() const final {
+    return CreateMaybeMessage<RandomGenerateDBResponseMessage>(nullptr);
+  }
+
+  RandomGenerateDBResponseMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RandomGenerateDBResponseMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RandomGenerateDBResponseMessage& from);
+  void MergeFrom(const RandomGenerateDBResponseMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RandomGenerateDBResponseMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RandomGenerateDBResponseMessage";
+  }
+  protected:
+  explicit RandomGenerateDBResponseMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGenResponseFieldNumber = 1,
+  };
+  // string gen_response = 1;
+  void clear_gen_response();
+  const std::string& gen_response() const;
+  void set_gen_response(const std::string& value);
+  void set_gen_response(std::string&& value);
+  void set_gen_response(const char* value);
+  void set_gen_response(const char* value, size_t size);
+  std::string* mutable_gen_response();
+  std::string* release_gen_response();
+  void set_allocated_gen_response(std::string* gen_response);
+  private:
+  const std::string& _internal_gen_response() const;
+  void _internal_set_gen_response(const std::string& value);
+  std::string* _internal_mutable_gen_response();
+  public:
+
+  // @@protoc_insertion_point(class_scope:RandomGenerateDBResponseMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gen_response_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ClearResponseMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ClearResponseMessage) */ {
+ public:
+  inline ClearResponseMessage() : ClearResponseMessage(nullptr) {}
+  virtual ~ClearResponseMessage();
+
+  ClearResponseMessage(const ClearResponseMessage& from);
+  ClearResponseMessage(ClearResponseMessage&& from) noexcept
+    : ClearResponseMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline ClearResponseMessage& operator=(const ClearResponseMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ClearResponseMessage& operator=(ClearResponseMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ClearResponseMessage& default_instance();
+
+  static inline const ClearResponseMessage* internal_default_instance() {
+    return reinterpret_cast<const ClearResponseMessage*>(
+               &_ClearResponseMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(ClearResponseMessage& a, ClearResponseMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ClearResponseMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ClearResponseMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ClearResponseMessage* New() const final {
+    return CreateMaybeMessage<ClearResponseMessage>(nullptr);
+  }
+
+  ClearResponseMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ClearResponseMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ClearResponseMessage& from);
+  void MergeFrom(const ClearResponseMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ClearResponseMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ClearResponseMessage";
+  }
+  protected:
+  explicit ClearResponseMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kClearResponseFieldNumber = 1,
+  };
+  // string clear_response = 1;
+  void clear_clear_response();
+  const std::string& clear_response() const;
+  void set_clear_response(const std::string& value);
+  void set_clear_response(std::string&& value);
+  void set_clear_response(const char* value);
+  void set_clear_response(const char* value, size_t size);
+  std::string* mutable_clear_response();
+  std::string* release_clear_response();
+  void set_allocated_clear_response(std::string* clear_response);
+  private:
+  const std::string& _internal_clear_response() const;
+  void _internal_set_clear_response(const std::string& value);
+  std::string* _internal_mutable_clear_response();
+  public:
+
+  // @@protoc_insertion_point(class_scope:ClearResponseMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr clear_response_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DestroyResponseMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DestroyResponseMessage) */ {
+ public:
+  inline DestroyResponseMessage() : DestroyResponseMessage(nullptr) {}
+  virtual ~DestroyResponseMessage();
+
+  DestroyResponseMessage(const DestroyResponseMessage& from);
+  DestroyResponseMessage(DestroyResponseMessage&& from) noexcept
+    : DestroyResponseMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline DestroyResponseMessage& operator=(const DestroyResponseMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DestroyResponseMessage& operator=(DestroyResponseMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const DestroyResponseMessage& default_instance();
+
+  static inline const DestroyResponseMessage* internal_default_instance() {
+    return reinterpret_cast<const DestroyResponseMessage*>(
+               &_DestroyResponseMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(DestroyResponseMessage& a, DestroyResponseMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DestroyResponseMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DestroyResponseMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DestroyResponseMessage* New() const final {
+    return CreateMaybeMessage<DestroyResponseMessage>(nullptr);
+  }
+
+  DestroyResponseMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DestroyResponseMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DestroyResponseMessage& from);
+  void MergeFrom(const DestroyResponseMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DestroyResponseMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DestroyResponseMessage";
+  }
+  protected:
+  explicit DestroyResponseMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_rpc_2eproto);
+    return ::descriptor_table_rpc_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDestroyResponseFieldNumber = 1,
+  };
+  // string destroy_response = 1;
+  void clear_destroy_response();
+  const std::string& destroy_response() const;
+  void set_destroy_response(const std::string& value);
+  void set_destroy_response(std::string&& value);
+  void set_destroy_response(const char* value);
+  void set_destroy_response(const char* value, size_t size);
+  std::string* mutable_destroy_response();
+  std::string* release_destroy_response();
+  void set_allocated_destroy_response(std::string* destroy_response);
+  private:
+  const std::string& _internal_destroy_response() const;
+  void _internal_set_destroy_response(const std::string& value);
+  std::string* _internal_mutable_destroy_response();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DestroyResponseMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr destroy_response_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_rpc_2eproto;
+};
 // ===================================================================
 
 
@@ -1678,67 +2576,6 @@ inline void SetupRequestMessage::set_allocated_setup_request(std::string* setup_
   setup_request_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), setup_request,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:SetupRequestMessage.setup_request)
-}
-
-// string setup_request2 = 2;
-inline void SetupRequestMessage::clear_setup_request2() {
-  setup_request2_.ClearToEmpty();
-}
-inline const std::string& SetupRequestMessage::setup_request2() const {
-  // @@protoc_insertion_point(field_get:SetupRequestMessage.setup_request2)
-  return _internal_setup_request2();
-}
-inline void SetupRequestMessage::set_setup_request2(const std::string& value) {
-  _internal_set_setup_request2(value);
-  // @@protoc_insertion_point(field_set:SetupRequestMessage.setup_request2)
-}
-inline std::string* SetupRequestMessage::mutable_setup_request2() {
-  // @@protoc_insertion_point(field_mutable:SetupRequestMessage.setup_request2)
-  return _internal_mutable_setup_request2();
-}
-inline const std::string& SetupRequestMessage::_internal_setup_request2() const {
-  return setup_request2_.Get();
-}
-inline void SetupRequestMessage::_internal_set_setup_request2(const std::string& value) {
-  
-  setup_request2_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
-}
-inline void SetupRequestMessage::set_setup_request2(std::string&& value) {
-  
-  setup_request2_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
-  // @@protoc_insertion_point(field_set_rvalue:SetupRequestMessage.setup_request2)
-}
-inline void SetupRequestMessage::set_setup_request2(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  
-  setup_request2_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
-  // @@protoc_insertion_point(field_set_char:SetupRequestMessage.setup_request2)
-}
-inline void SetupRequestMessage::set_setup_request2(const char* value,
-    size_t size) {
-  
-  setup_request2_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArena());
-  // @@protoc_insertion_point(field_set_pointer:SetupRequestMessage.setup_request2)
-}
-inline std::string* SetupRequestMessage::_internal_mutable_setup_request2() {
-  
-  return setup_request2_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
-}
-inline std::string* SetupRequestMessage::release_setup_request2() {
-  // @@protoc_insertion_point(field_release:SetupRequestMessage.setup_request2)
-  return setup_request2_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-}
-inline void SetupRequestMessage::set_allocated_setup_request2(std::string* setup_request2) {
-  if (setup_request2 != nullptr) {
-    
-  } else {
-    
-  }
-  setup_request2_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), setup_request2,
-      GetArena());
-  // @@protoc_insertion_point(field_set_allocated:SetupRequestMessage.setup_request2)
 }
 
 // -------------------------------------------------------------------
@@ -2100,6 +2937,288 @@ inline void ShowAllRequestMessage::set_allocated_showall_request(std::string* sh
   showall_request_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), showall_request,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:ShowAllRequestMessage.showall_request)
+}
+
+// -------------------------------------------------------------------
+
+// RandomGenerateDBRequestMessage
+
+// repeated string gen_request_key = 1;
+inline int RandomGenerateDBRequestMessage::_internal_gen_request_key_size() const {
+  return gen_request_key_.size();
+}
+inline int RandomGenerateDBRequestMessage::gen_request_key_size() const {
+  return _internal_gen_request_key_size();
+}
+inline void RandomGenerateDBRequestMessage::clear_gen_request_key() {
+  gen_request_key_.Clear();
+}
+inline std::string* RandomGenerateDBRequestMessage::add_gen_request_key() {
+  // @@protoc_insertion_point(field_add_mutable:RandomGenerateDBRequestMessage.gen_request_key)
+  return _internal_add_gen_request_key();
+}
+inline const std::string& RandomGenerateDBRequestMessage::_internal_gen_request_key(int index) const {
+  return gen_request_key_.Get(index);
+}
+inline const std::string& RandomGenerateDBRequestMessage::gen_request_key(int index) const {
+  // @@protoc_insertion_point(field_get:RandomGenerateDBRequestMessage.gen_request_key)
+  return _internal_gen_request_key(index);
+}
+inline std::string* RandomGenerateDBRequestMessage::mutable_gen_request_key(int index) {
+  // @@protoc_insertion_point(field_mutable:RandomGenerateDBRequestMessage.gen_request_key)
+  return gen_request_key_.Mutable(index);
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_key(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:RandomGenerateDBRequestMessage.gen_request_key)
+  gen_request_key_.Mutable(index)->assign(value);
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_key(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:RandomGenerateDBRequestMessage.gen_request_key)
+  gen_request_key_.Mutable(index)->assign(std::move(value));
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_key(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  gen_request_key_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_key(int index, const char* value, size_t size) {
+  gen_request_key_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline std::string* RandomGenerateDBRequestMessage::_internal_add_gen_request_key() {
+  return gen_request_key_.Add();
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_key(const std::string& value) {
+  gen_request_key_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_key(std::string&& value) {
+  gen_request_key_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_key(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  gen_request_key_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_key(const char* value, size_t size) {
+  gen_request_key_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:RandomGenerateDBRequestMessage.gen_request_key)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+RandomGenerateDBRequestMessage::gen_request_key() const {
+  // @@protoc_insertion_point(field_list:RandomGenerateDBRequestMessage.gen_request_key)
+  return gen_request_key_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+RandomGenerateDBRequestMessage::mutable_gen_request_key() {
+  // @@protoc_insertion_point(field_mutable_list:RandomGenerateDBRequestMessage.gen_request_key)
+  return &gen_request_key_;
+}
+
+// repeated string gen_request_value = 2;
+inline int RandomGenerateDBRequestMessage::_internal_gen_request_value_size() const {
+  return gen_request_value_.size();
+}
+inline int RandomGenerateDBRequestMessage::gen_request_value_size() const {
+  return _internal_gen_request_value_size();
+}
+inline void RandomGenerateDBRequestMessage::clear_gen_request_value() {
+  gen_request_value_.Clear();
+}
+inline std::string* RandomGenerateDBRequestMessage::add_gen_request_value() {
+  // @@protoc_insertion_point(field_add_mutable:RandomGenerateDBRequestMessage.gen_request_value)
+  return _internal_add_gen_request_value();
+}
+inline const std::string& RandomGenerateDBRequestMessage::_internal_gen_request_value(int index) const {
+  return gen_request_value_.Get(index);
+}
+inline const std::string& RandomGenerateDBRequestMessage::gen_request_value(int index) const {
+  // @@protoc_insertion_point(field_get:RandomGenerateDBRequestMessage.gen_request_value)
+  return _internal_gen_request_value(index);
+}
+inline std::string* RandomGenerateDBRequestMessage::mutable_gen_request_value(int index) {
+  // @@protoc_insertion_point(field_mutable:RandomGenerateDBRequestMessage.gen_request_value)
+  return gen_request_value_.Mutable(index);
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_value(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:RandomGenerateDBRequestMessage.gen_request_value)
+  gen_request_value_.Mutable(index)->assign(value);
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_value(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:RandomGenerateDBRequestMessage.gen_request_value)
+  gen_request_value_.Mutable(index)->assign(std::move(value));
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_value(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  gen_request_value_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline void RandomGenerateDBRequestMessage::set_gen_request_value(int index, const char* value, size_t size) {
+  gen_request_value_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline std::string* RandomGenerateDBRequestMessage::_internal_add_gen_request_value() {
+  return gen_request_value_.Add();
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_value(const std::string& value) {
+  gen_request_value_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_value(std::string&& value) {
+  gen_request_value_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_value(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  gen_request_value_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline void RandomGenerateDBRequestMessage::add_gen_request_value(const char* value, size_t size) {
+  gen_request_value_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:RandomGenerateDBRequestMessage.gen_request_value)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+RandomGenerateDBRequestMessage::gen_request_value() const {
+  // @@protoc_insertion_point(field_list:RandomGenerateDBRequestMessage.gen_request_value)
+  return gen_request_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+RandomGenerateDBRequestMessage::mutable_gen_request_value() {
+  // @@protoc_insertion_point(field_mutable_list:RandomGenerateDBRequestMessage.gen_request_value)
+  return &gen_request_value_;
+}
+
+// -------------------------------------------------------------------
+
+// ClearRequestMessage
+
+// string clear_request = 1;
+inline void ClearRequestMessage::clear_clear_request() {
+  clear_request_.ClearToEmpty();
+}
+inline const std::string& ClearRequestMessage::clear_request() const {
+  // @@protoc_insertion_point(field_get:ClearRequestMessage.clear_request)
+  return _internal_clear_request();
+}
+inline void ClearRequestMessage::set_clear_request(const std::string& value) {
+  _internal_set_clear_request(value);
+  // @@protoc_insertion_point(field_set:ClearRequestMessage.clear_request)
+}
+inline std::string* ClearRequestMessage::mutable_clear_request() {
+  // @@protoc_insertion_point(field_mutable:ClearRequestMessage.clear_request)
+  return _internal_mutable_clear_request();
+}
+inline const std::string& ClearRequestMessage::_internal_clear_request() const {
+  return clear_request_.Get();
+}
+inline void ClearRequestMessage::_internal_set_clear_request(const std::string& value) {
+  
+  clear_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void ClearRequestMessage::set_clear_request(std::string&& value) {
+  
+  clear_request_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:ClearRequestMessage.clear_request)
+}
+inline void ClearRequestMessage::set_clear_request(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  clear_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:ClearRequestMessage.clear_request)
+}
+inline void ClearRequestMessage::set_clear_request(const char* value,
+    size_t size) {
+  
+  clear_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:ClearRequestMessage.clear_request)
+}
+inline std::string* ClearRequestMessage::_internal_mutable_clear_request() {
+  
+  return clear_request_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* ClearRequestMessage::release_clear_request() {
+  // @@protoc_insertion_point(field_release:ClearRequestMessage.clear_request)
+  return clear_request_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void ClearRequestMessage::set_allocated_clear_request(std::string* clear_request) {
+  if (clear_request != nullptr) {
+    
+  } else {
+    
+  }
+  clear_request_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), clear_request,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:ClearRequestMessage.clear_request)
+}
+
+// -------------------------------------------------------------------
+
+// DestroyRequestMessage
+
+// string destroy_request = 1;
+inline void DestroyRequestMessage::clear_destroy_request() {
+  destroy_request_.ClearToEmpty();
+}
+inline const std::string& DestroyRequestMessage::destroy_request() const {
+  // @@protoc_insertion_point(field_get:DestroyRequestMessage.destroy_request)
+  return _internal_destroy_request();
+}
+inline void DestroyRequestMessage::set_destroy_request(const std::string& value) {
+  _internal_set_destroy_request(value);
+  // @@protoc_insertion_point(field_set:DestroyRequestMessage.destroy_request)
+}
+inline std::string* DestroyRequestMessage::mutable_destroy_request() {
+  // @@protoc_insertion_point(field_mutable:DestroyRequestMessage.destroy_request)
+  return _internal_mutable_destroy_request();
+}
+inline const std::string& DestroyRequestMessage::_internal_destroy_request() const {
+  return destroy_request_.Get();
+}
+inline void DestroyRequestMessage::_internal_set_destroy_request(const std::string& value) {
+  
+  destroy_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void DestroyRequestMessage::set_destroy_request(std::string&& value) {
+  
+  destroy_request_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:DestroyRequestMessage.destroy_request)
+}
+inline void DestroyRequestMessage::set_destroy_request(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  destroy_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:DestroyRequestMessage.destroy_request)
+}
+inline void DestroyRequestMessage::set_destroy_request(const char* value,
+    size_t size) {
+  
+  destroy_request_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:DestroyRequestMessage.destroy_request)
+}
+inline std::string* DestroyRequestMessage::_internal_mutable_destroy_request() {
+  
+  return destroy_request_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* DestroyRequestMessage::release_destroy_request() {
+  // @@protoc_insertion_point(field_release:DestroyRequestMessage.destroy_request)
+  return destroy_request_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void DestroyRequestMessage::set_allocated_destroy_request(std::string* destroy_request) {
+  if (destroy_request != nullptr) {
+    
+  } else {
+    
+  }
+  destroy_request_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), destroy_request,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:DestroyRequestMessage.destroy_request)
 }
 
 // -------------------------------------------------------------------
@@ -2466,9 +3585,216 @@ ShowAllResponseMessage::mutable_showall_response() {
   return &showall_response_;
 }
 
+// -------------------------------------------------------------------
+
+// RandomGenerateDBResponseMessage
+
+// string gen_response = 1;
+inline void RandomGenerateDBResponseMessage::clear_gen_response() {
+  gen_response_.ClearToEmpty();
+}
+inline const std::string& RandomGenerateDBResponseMessage::gen_response() const {
+  // @@protoc_insertion_point(field_get:RandomGenerateDBResponseMessage.gen_response)
+  return _internal_gen_response();
+}
+inline void RandomGenerateDBResponseMessage::set_gen_response(const std::string& value) {
+  _internal_set_gen_response(value);
+  // @@protoc_insertion_point(field_set:RandomGenerateDBResponseMessage.gen_response)
+}
+inline std::string* RandomGenerateDBResponseMessage::mutable_gen_response() {
+  // @@protoc_insertion_point(field_mutable:RandomGenerateDBResponseMessage.gen_response)
+  return _internal_mutable_gen_response();
+}
+inline const std::string& RandomGenerateDBResponseMessage::_internal_gen_response() const {
+  return gen_response_.Get();
+}
+inline void RandomGenerateDBResponseMessage::_internal_set_gen_response(const std::string& value) {
+  
+  gen_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void RandomGenerateDBResponseMessage::set_gen_response(std::string&& value) {
+  
+  gen_response_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:RandomGenerateDBResponseMessage.gen_response)
+}
+inline void RandomGenerateDBResponseMessage::set_gen_response(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  gen_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:RandomGenerateDBResponseMessage.gen_response)
+}
+inline void RandomGenerateDBResponseMessage::set_gen_response(const char* value,
+    size_t size) {
+  
+  gen_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:RandomGenerateDBResponseMessage.gen_response)
+}
+inline std::string* RandomGenerateDBResponseMessage::_internal_mutable_gen_response() {
+  
+  return gen_response_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* RandomGenerateDBResponseMessage::release_gen_response() {
+  // @@protoc_insertion_point(field_release:RandomGenerateDBResponseMessage.gen_response)
+  return gen_response_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void RandomGenerateDBResponseMessage::set_allocated_gen_response(std::string* gen_response) {
+  if (gen_response != nullptr) {
+    
+  } else {
+    
+  }
+  gen_response_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), gen_response,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:RandomGenerateDBResponseMessage.gen_response)
+}
+
+// -------------------------------------------------------------------
+
+// ClearResponseMessage
+
+// string clear_response = 1;
+inline void ClearResponseMessage::clear_clear_response() {
+  clear_response_.ClearToEmpty();
+}
+inline const std::string& ClearResponseMessage::clear_response() const {
+  // @@protoc_insertion_point(field_get:ClearResponseMessage.clear_response)
+  return _internal_clear_response();
+}
+inline void ClearResponseMessage::set_clear_response(const std::string& value) {
+  _internal_set_clear_response(value);
+  // @@protoc_insertion_point(field_set:ClearResponseMessage.clear_response)
+}
+inline std::string* ClearResponseMessage::mutable_clear_response() {
+  // @@protoc_insertion_point(field_mutable:ClearResponseMessage.clear_response)
+  return _internal_mutable_clear_response();
+}
+inline const std::string& ClearResponseMessage::_internal_clear_response() const {
+  return clear_response_.Get();
+}
+inline void ClearResponseMessage::_internal_set_clear_response(const std::string& value) {
+  
+  clear_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void ClearResponseMessage::set_clear_response(std::string&& value) {
+  
+  clear_response_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:ClearResponseMessage.clear_response)
+}
+inline void ClearResponseMessage::set_clear_response(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  clear_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:ClearResponseMessage.clear_response)
+}
+inline void ClearResponseMessage::set_clear_response(const char* value,
+    size_t size) {
+  
+  clear_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:ClearResponseMessage.clear_response)
+}
+inline std::string* ClearResponseMessage::_internal_mutable_clear_response() {
+  
+  return clear_response_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* ClearResponseMessage::release_clear_response() {
+  // @@protoc_insertion_point(field_release:ClearResponseMessage.clear_response)
+  return clear_response_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void ClearResponseMessage::set_allocated_clear_response(std::string* clear_response) {
+  if (clear_response != nullptr) {
+    
+  } else {
+    
+  }
+  clear_response_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), clear_response,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:ClearResponseMessage.clear_response)
+}
+
+// -------------------------------------------------------------------
+
+// DestroyResponseMessage
+
+// string destroy_response = 1;
+inline void DestroyResponseMessage::clear_destroy_response() {
+  destroy_response_.ClearToEmpty();
+}
+inline const std::string& DestroyResponseMessage::destroy_response() const {
+  // @@protoc_insertion_point(field_get:DestroyResponseMessage.destroy_response)
+  return _internal_destroy_response();
+}
+inline void DestroyResponseMessage::set_destroy_response(const std::string& value) {
+  _internal_set_destroy_response(value);
+  // @@protoc_insertion_point(field_set:DestroyResponseMessage.destroy_response)
+}
+inline std::string* DestroyResponseMessage::mutable_destroy_response() {
+  // @@protoc_insertion_point(field_mutable:DestroyResponseMessage.destroy_response)
+  return _internal_mutable_destroy_response();
+}
+inline const std::string& DestroyResponseMessage::_internal_destroy_response() const {
+  return destroy_response_.Get();
+}
+inline void DestroyResponseMessage::_internal_set_destroy_response(const std::string& value) {
+  
+  destroy_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void DestroyResponseMessage::set_destroy_response(std::string&& value) {
+  
+  destroy_response_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:DestroyResponseMessage.destroy_response)
+}
+inline void DestroyResponseMessage::set_destroy_response(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  destroy_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:DestroyResponseMessage.destroy_response)
+}
+inline void DestroyResponseMessage::set_destroy_response(const char* value,
+    size_t size) {
+  
+  destroy_response_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:DestroyResponseMessage.destroy_response)
+}
+inline std::string* DestroyResponseMessage::_internal_mutable_destroy_response() {
+  
+  return destroy_response_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* DestroyResponseMessage::release_destroy_response() {
+  // @@protoc_insertion_point(field_release:DestroyResponseMessage.destroy_response)
+  return destroy_response_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void DestroyResponseMessage::set_allocated_destroy_response(std::string* destroy_response) {
+  if (destroy_response != nullptr) {
+    
+  } else {
+    
+  }
+  destroy_response_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), destroy_response,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:DestroyResponseMessage.destroy_response)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
