@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 #include <string>
 
 #include <grpc++/grpc++.h>
@@ -36,20 +35,61 @@ class ServiceImpl final : public RPC::Service
     grpc::Status search(ServerContext *context, const SearchRequestMessage *request, SearchResponseMessage *reply)
         override
     {
-        std::string data;
-        searchDB(request->is_key(), request->search_request(), data, re);
-        for (auto &&item : re)
+        std::vector<unsigned char> Ki;
+        std::vector<unsigned char> Xi;
+        for (auto &&i : request->ki())
         {
-            reply->add_search_response(item);
+            Ki.push_back(i);
         }
+        for (auto &&i : request->xi())
+        {
+            Xi.push_back(i);
+        }
+        std::vector<std::string> cf;
+        std::vector<int> kv_num;
+        std::vector<int> key;
+        std::vector<std::vector<unsigned char>> value;
+
+        searchDB(Ki, Xi, cf, kv_num, key, value, msg);
+
+        for (auto &&i : cf)
+        {
+            reply->add_search_cf(i);
+        }
+        for (auto &&i : kv_num)
+        {
+            reply->add_search_kv_num(i);
+        }
+
+        kv *k_v;
+        for (size_t j = 0; j < key.size(); j++)
+        {
+            k_v = reply->add_search_kv();
+            k_v->set_key(key[j]);
+            for (size_t i = 0; i < 24; i++)
+            {
+                k_v->add_value(value[j][i]);
+            }
+        }
+        reply->set_search_response(msg);
+
         return grpc::Status::OK;
     }
 
     grpc::Status add_data(ServerContext *context, const AddRequestMessage *request, AddResponseMessage *reply)
         override
     {
-        addDB(request->add_request_key(), request->add_request_value(), msg);
-        reply->set_add_response(msg);
+        int add_key;
+        std::vector<unsigned char> add_value;
+        std::string add_columnfamily;
+        add_key = request->add_key();
+        for (auto &&item : request->add_value())
+        {
+            add_value.push_back(item);
+        }
+
+        add_columnfamily = request->add_columnfamily();
+        reply->set_add_response(addDB(add_key, add_value, add_columnfamily));
         return grpc::Status::OK;
     }
 
@@ -57,49 +97,74 @@ class ServiceImpl final : public RPC::Service
         override
     {
         std::string data;
-        deleteDB(request->is_key(), request->delete_request(), re);
-        for (auto &&item : re)
-        {
-            reply->add_delete_response(item);
-        }
+        deleteDB(request->delete_columnfamily(), msg);
+
+        reply->set_delete_response(msg);
+
         return grpc::Status::OK;
     }
 
     grpc::Status show_all(ServerContext *context, const ShowAllRequestMessage *request, ShowAllResponseMessage *reply)
         override
     {
+        std::vector<std::string> cf;
+        std::vector<int> kv_num;
+        std::vector<int> key;
+        std::vector<std::vector<unsigned char>> value;
 
-        showDB(re);
-        for (auto &&item : re)
+        reply->set_showall_response(showDB(cf, kv_num, key, value));
+        for (auto &&i : cf)
         {
-            reply->add_showall_response(item);
+            reply->add_showall_cf(i);
         }
+        for (auto &&i : kv_num)
+        {
+            reply->add_kv_num(i);
+        }
+
+        kv *k_v;
+        for (size_t j = 0; j < key.size(); j++)
+        {
+            k_v = reply->add_showall_kv();
+            k_v->set_key(key[j]);
+            for (size_t i = 0; i < 24; i++)
+            {
+                k_v->add_value(value[j][i]);
+            }
+        }
+
         return grpc::Status::OK;
     }
 
     grpc::Status RanGenDB(ServerContext *context, const RandomGenerateDBRequestMessage *request, RandomGenerateDBResponseMessage *reply)
         override
     {
-        std::vector<std::string> keyv;
-        std::vector<std::string> valuev;
-        for (auto &&item : request->gen_request_key())
+        std::vector<std::string> cf_name;
+        for (auto &&i : request->cf_name())
         {
-            keyv.push_back(item);
+            cf_name.push_back(i);
         }
-        for (auto &&item : request->gen_request_value())
+        std::vector<int> every_cf_kv_num;
+        for (auto &&i : request->gen_kv_num())
         {
-            valuev.push_back(item);
+            every_cf_kv_num.push_back(i);
         }
-        rangenDB(keyv, valuev, msg);
-        reply->set_gen_response(msg);
-        return grpc::Status::OK;
-    }
+        std::vector<int> key;
+        std::vector<std::vector<unsigned char>> value;
+        std::vector<unsigned char> one_word;
+        for (auto &&k_v : request->gen_kv())
+        {
+            key.push_back(k_v.key());
+            for (auto &&i : k_v.value())
+            {
+                one_word.push_back(i);
+            }
+            value.push_back(one_word);
+            one_word.clear();
+        }
 
-    grpc::Status ClearDB(ServerContext *context, const ClearRequestMessage *request, ClearResponseMessage *reply)
-        override
-    {
-        clearDB(msg);
-        reply->set_clear_response(msg);
+        rangenDB(cf_name, every_cf_kv_num, key, value, msg);
+        reply->set_gen_response(msg);
         return grpc::Status::OK;
     }
 
@@ -112,11 +177,23 @@ class ServiceImpl final : public RPC::Service
     }
 
     void setupDB(std::string &msg);
-    void searchDB(const bool &iskey, const std::string &key, std::string &data, std::vector<std::string> &re);
-    void addDB(const std::string &key, const std::string &value, std::string &msg);
-    void deleteDB(const bool &iskey, const std::string &key, std::vector<std::string> &re);
-    void showDB(std::vector<std::string> &re);
-    void rangenDB(std::vector<std::string> &keyv, std::vector<std::string> &valuev, std::string &msg);
-    void clearDB(std::string &msg);
+    void searchDB(std::vector<unsigned char> &Ki,
+                  std::vector<unsigned char> &Xi,
+                  std::vector<std::string> &cf,
+                  std::vector<int> &kv_num,
+                  std::vector<int> &key,
+                  std::vector<std::vector<unsigned char>> &value,
+                  std::string &msg);
+    bool addDB(int add_key, std::vector<unsigned char> &add_value, std::string &add_columnfamily);
+    void deleteDB(const std::string &del_cf, std::string &msg);
+    bool showDB(std::vector<std::string> &cf,
+                std::vector<int> &kv_num,
+                std::vector<int> &key,
+                std::vector<std::vector<unsigned char>> &value);
+    void rangenDB(std::vector<std::string> &cf_name,
+                  std::vector<int> &every_cf_kv_num,
+                  std::vector<int> &key,
+                  std::vector<std::vector<unsigned char>> &value,
+                  std::string &msg);
     void destroyDB(std::string &msg);
 };

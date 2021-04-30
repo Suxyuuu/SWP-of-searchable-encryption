@@ -10,6 +10,7 @@
 
 #include "rpc.grpc.pb.h"
 #include "server.h"
+#include "encryption.h"
 
 #include <rocksdb/db.h>
 #include <rocksdb/slice.h>
@@ -46,274 +47,457 @@ void ServiceImpl::setupDB(std::string &msg)
 // 查询数据库 支持用key查询 同时支持用value查询
 // 输入：1-是否是key 2-是key则为key的值 不是key则为value
 // 输出：1-是key则输出对应的value 2-不是key则返回所有与value相等的k—v对
-void ServiceImpl::searchDB(const bool &iskey, const std::string &key, std::string &data, std::vector<std::string> &re)
+void ServiceImpl::searchDB(std::vector<unsigned char> &Ki,
+                           std::vector<unsigned char> &Xi,
+                           std::vector<std::string> &hitted_cf,
+                           std::vector<int> &kv_num,
+                           std::vector<int> &key,
+                           std::vector<std::vector<unsigned char>> &value,
+                           std::string &msg)
 {
     rocksdb::DB *db;
     rocksdb::Options options;
     rocksdb::Status r_status;
-    r_status = rocksdb::DB::Open(options, DBPATH, &db);
-    re.clear();
-    if (r_status.ok())
-    {
-        if (iskey)
-        {
-            r_status = db->Get(rocksdb::ReadOptions(), key, &data);
 
-            if (r_status.ok())
-            {
-                re.push_back("[Key:Value] = [ " + key + " : " + data + " ]");
-            }
-            else
-            {
-                re.push_back("Search Failed! No Key is equal to \'" + key + "\' ");
-            }
-        }
-        else
-        {
-            rocksdb::Iterator *it = db->NewIterator(rocksdb::ReadOptions());
-            bool isfound = false;
-            for (it->SeekToFirst(); it->Valid(); it->Next())
-            {
-                if (key == it->value().ToString())
-                {
-                    isfound = true;
-                    re.push_back("[Key:Value] = [ " + it->key().ToString() + " : " + key + " ]");
-                }
-            }
-            if (!isfound)
-            {
-                re.push_back("Search Failed! No Value is equal to \'" + key + "\' ");
-            }
-            assert(it->status().ok()); // Check for any errors found during the scan
-            delete it;
-        }
+    rocksdb::ColumnFamilyHandle *cf;
+    // std::vector<std::string> exist_cf;
+    std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
+    std::vector<rocksdb::ColumnFamilyHandle *> handles;
+
+    std::vector<std::string> exist_cf;
+    rocksdb::DB::ListColumnFamilies(options, DBPATH, &exist_cf);
+    if (exist_cf.size() == 0)
+    {
+        msg = "There's no data in DB.";
     }
     else
     {
-        re.push_back("No DB! Please setup a DB first! ");
+        for (auto &&columnfamily : exist_cf)
+        {
+            column_families.push_back(rocksdb::ColumnFamilyDescriptor(columnfamily, rocksdb::ColumnFamilyOptions()));
+        }
+        r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+        if (!r_status.ok())
+        {
+            msg = "Open DB Failed.";
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+        }
+        else
+        {
+            std::vector<rocksdb::Iterator *> iterators;
+            db->NewIterators(rocksdb::ReadOptions(), handles, &iterators);
+            for (size_t i = 0; i < iterators.size(); i++)
+            {
+                for (iterators[i]->SeekToFirst(); iterators[i]->Valid(); iterators[i]->Next())
+                {
+                    std::vector<unsigned char> Ci;
+                    for (size_t j = 0; j < 24; j++)
+                    {
+                        Ci.push_back(iterators[i]->value().data()[j]);
+                    }
+                    if (search_swp(Ki, Xi, Ci))
+                    {
+                        hitted_cf.push_back(handles[i]->GetName());
+                        break;
+                    }
+                }
+                assert(iterators[i]->status().ok());
+            }
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+
+            // Now already got the hitted cf
+            if (hitted_cf.size() == 0)
+            {
+                msg = "No matches!";
+            }
+            else
+            {
+
+                r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+                // std::cerr << r_status.ToString() << std::endl;
+                if (!r_status.ok())
+                {
+                    msg = "Open DB Failed.";
+                    for (auto handle : handles)
+                    {
+                        r_status = db->DestroyColumnFamilyHandle(handle);
+                        assert(r_status.ok());
+                    }
+                    delete db;
+                }
+                else
+                {
+                    std::vector<rocksdb::Iterator *> iterators;
+                    db->NewIterators(rocksdb::ReadOptions(), handles, &iterators);
+                    int kv_count = 0;
+                    for (size_t i = 0; i < iterators.size(); i++)
+                    {
+                        int hit_flag = false;
+                        std::string cfname = handles[i]->GetName();
+                        for (auto &&hitcf : hitted_cf)
+                        {
+                            if (hitcf == cfname)
+                            {
+                                hit_flag = true;
+                            }
+                        }
+                        if (!hit_flag)
+                        {
+                            continue;
+                        }
+
+                        for (iterators[i]->SeekToFirst(); iterators[i]->Valid(); iterators[i]->Next())
+                        {
+                            std::vector<unsigned char> word;
+                            for (size_t j = 0; j < 24; j++)
+                            {
+                                word.push_back(iterators[i]->value().data()[j]);
+                            }
+                            value.push_back(word);
+
+                            key.push_back(stoi(iterators[i]->key().ToString()));
+
+                            kv_count++;
+                        }
+                        assert(iterators[i]->status().ok());
+                        kv_num.push_back(kv_count);
+                        kv_count = 0;
+                    }
+                    for (auto handle : handles)
+                    {
+                        r_status = db->DestroyColumnFamilyHandle(handle);
+                        assert(r_status.ok());
+                    }
+                    delete db;
+                    msg = "search successfully!";
+                }
+            }
+        }
     }
-    delete db;
 }
 
 // 添加k-v对
 // 输入：1-key 2-value
 // 输出：执行结果msg
-void ServiceImpl::addDB(const std::string &add_key, const std::string &add_value, std::string &msg)
+bool ServiceImpl::addDB(int add_key, std::vector<unsigned char> &add_value, std::string &add_columnfamily)
 {
     rocksdb::DB *db;
     rocksdb::Options options;
     rocksdb::Status r_status;
-    r_status = rocksdb::DB::Open(options, DBPATH, &db);
-    if (r_status.ok())
+
+    rocksdb::ColumnFamilyHandle *cf;
+    std::vector<std::string> exist_cf;
+    std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
+    std::vector<rocksdb::ColumnFamilyHandle *> handles;
+
+    bool flag = false;
+    int handle_num = 0;
+
+    rocksdb::DB::ListColumnFamilies(options, DBPATH, &exist_cf);
+    for (size_t i = 0; i < exist_cf.size(); i++)
     {
-        rocksdb::Slice key(add_key);
-        rocksdb::Slice value(add_value);
-        r_status = db->Put(rocksdb::WriteOptions(), key, value);
+        column_families.push_back(rocksdb::ColumnFamilyDescriptor(exist_cf[i], rocksdb::ColumnFamilyOptions()));
+        if (exist_cf[i] == add_columnfamily)
+        {
+            flag = true;
+            handle_num = i;
+        }
+    }
+
+    if (!flag)
+    {
+        // create a new columnfamily
+        r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
         if (r_status.ok())
         {
-            msg = "Add Successfully! ";
+            r_status = db->CreateColumnFamily(rocksdb::ColumnFamilyOptions(), add_columnfamily, &cf);
+            assert(r_status.ok());
+
+            column_families.push_back(rocksdb::ColumnFamilyDescriptor(add_columnfamily, rocksdb::ColumnFamilyOptions()));
+
+            r_status = db->DestroyColumnFamilyHandle(cf);
+            assert(r_status.ok());
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
         }
         else
         {
-            msg = "Add Failed! ";
+            delete db;
+            return false;
+        }
+    }
+
+    r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+
+    // add
+    if (r_status.ok())
+    {
+        char v[24];
+        for (int i = 0; i < 24; i++)
+        {
+            v[i] = add_value[i];
+        }
+
+        rocksdb::Slice key(std::to_string(add_key));
+        rocksdb::Slice value(v, 24);
+
+        if (flag)
+        {
+            r_status = db->Put(rocksdb::WriteOptions(), handles[handle_num], key, value);
+        }
+        else
+        {
+            r_status = db->Put(rocksdb::WriteOptions(), handles[handles.size() - 1], key, value);
+        }
+
+        if (r_status.ok())
+        {
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+            return true;
+        }
+        else
+        {
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+            return false;
         }
     }
     else
     {
-        msg = "No DB! Please setup a DB first! ";
+        for (auto handle : handles)
+        {
+            r_status = db->DestroyColumnFamilyHandle(handle);
+            assert(r_status.ok());
+        }
+        delete db;
+        return false;
     }
-
-    delete db;
 }
 
 // 删除k-v对
 // 输入：1-是否是key 2-是key则为key的值 不是key则为value
 // 输出：删除结果
-void ServiceImpl::deleteDB(const bool &iskey, const std::string &key, std::vector<std::string> &re)
+void ServiceImpl::deleteDB(const std::string &del_cf, std::string &msg)
 {
     rocksdb::DB *db;
     rocksdb::Options options;
     rocksdb::Status r_status;
-    r_status = rocksdb::DB::Open(options, DBPATH, &db);
-    re.clear();
-    if (r_status.ok())
-    {
-        if (iskey)
-        {
-            std::string data;
-            r_status = db->Get(rocksdb::ReadOptions(), key, &data);
-            if (r_status.ok())
-            {
-                r_status = db->Delete(rocksdb::WriteOptions(), key);
-                if (r_status.ok())
-                {
-                    re.push_back("[Key:Value] = [ " + key + " : " + data + " ] was deleted! ");
-                    re.push_back("Delete Successfully! DeletedItems_num:1. ");
-                }
-                else
-                {
-                    re.push_back("Delete Failed! Some Error in DB.");
-                }
-            }
-            else
-            {
-                re.push_back("Delete Failed! No Key is equal to \'" + key + "\' ");
-            }
-        }
-        else
-        {
-            rocksdb::Iterator *it = db->NewIterator(rocksdb::ReadOptions());
-            int foundnum = 0;
-            for (it->SeekToFirst(); it->Valid(); it->Next())
-            {
-                if (key == it->value().ToString())
-                {
-                    foundnum++;
-                    re.push_back("[Key:Value] = [ " + it->key().ToString() + " : " + key + " ] was deleted! ");
-                    db->Delete(rocksdb::WriteOptions(), it->key());
-                }
-            }
-            if (!foundnum)
-            {
-                re.push_back("Delete Failed! No Value is equal to \'" + key + "\' ");
-            }
-            else
-            {
-                re.push_back("Delete Successfully! DeletedItems_num:" + std::to_string(foundnum) + ". ");
-            }
 
-            assert(it->status().ok()); // Check for any errors found during the scan
-            delete it;
+    rocksdb::ColumnFamilyHandle *cf;
+    std::vector<std::string> exist_cf;
+    std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
+    std::vector<rocksdb::ColumnFamilyHandle *> handles;
+
+    bool flag = false;
+    int handle_num = 0;
+
+    rocksdb::DB::ListColumnFamilies(options, DBPATH, &exist_cf);
+
+    for (size_t i = 0; i < exist_cf.size(); i++)
+    {
+        column_families.push_back(rocksdb::ColumnFamilyDescriptor(exist_cf[i], rocksdb::ColumnFamilyOptions()));
+        if (exist_cf[i] == del_cf)
+        {
+            flag = true;
+            handle_num = i;
         }
+    }
+    if (!flag)
+    {
+        msg = "Delete Failed! No columnfamily equals " + del_cf + ".";
     }
     else
     {
-        msg = "No DB! Please setup a DB first! ";
+        r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+        assert(r_status.ok());
+        r_status = db->DropColumnFamily(handles[handle_num]);
+        assert(r_status.ok());
+        msg = "Delete Successfully!";
+        for (auto handle : handles)
+        {
+            r_status = db->DestroyColumnFamilyHandle(handle);
+            assert(r_status.ok());
+        }
+        delete db;
     }
-    delete db;
 }
 
 // 展示数据库所有数据 以k-v对的形式展示
-void ServiceImpl::showDB(std::vector<std::string> &re)
+bool ServiceImpl::showDB(std::vector<std::string> &exist_cf,
+                         std::vector<int> &kv_num,
+                         std::vector<int> &key,
+                         std::vector<std::vector<unsigned char>> &value)
 {
     rocksdb::DB *db;
     rocksdb::Options options;
     rocksdb::Status r_status;
-    r_status = rocksdb::DB::Open(options, DBPATH, &db);
 
-    re.clear();
+    rocksdb::ColumnFamilyHandle *cf;
+    // std::vector<std::string> exist_cf;
+    std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
+    std::vector<rocksdb::ColumnFamilyHandle *> handles;
 
-    if (r_status.ok())
+    rocksdb::DB::ListColumnFamilies(options, DBPATH, &exist_cf);
+
+    if (exist_cf.size() == 0)
     {
-        rocksdb::Iterator *it = db->NewIterator(rocksdb::ReadOptions());
-        for (it->SeekToFirst(); it->Valid(); it->Next())
-        {
-            re.push_back("[Key:Value] = [ " + it->key().ToString() + " : " + it->value().ToString() + " ]");
-        }
-        assert(it->status().ok()); // Check for any errors found during the scan
-        delete it;
+        return true; // 只是为空 但操作是成功的
     }
     else
     {
-        re.push_back("No DB! Please setup a DB first! ");
-    }
+        for (auto &&columnfamily : exist_cf)
+        {
+            // std::cout << columnfamily << std::endl;
+            column_families.push_back(rocksdb::ColumnFamilyDescriptor(columnfamily, rocksdb::ColumnFamilyOptions()));
+        }
+        r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+        if (!r_status.ok())
+        {
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+            return false;
+        }
+        else
+        {
+            std::vector<rocksdb::Iterator *> iterators;
+            db->NewIterators(rocksdb::ReadOptions(), handles, &iterators);
+            int kv_count = 0;
+            for (size_t i = 0; i < iterators.size(); i++)
+            {
+                for (iterators[i]->SeekToFirst(); iterators[i]->Valid(); iterators[i]->Next())
+                {
+                    std::vector<unsigned char> word;
+                    for (size_t j = 0; j < 24; j++)
+                    {
+                        word.push_back(iterators[i]->value().data()[j]);
+                    }
+                    value.push_back(word);
 
-    delete db;
+                    key.push_back(stoi(iterators[i]->key().ToString()));
+
+                    kv_count++;
+                }
+                assert(iterators[i]->status().ok());
+                kv_num.push_back(kv_count);
+                kv_count = 0;
+            }
+            for (auto handle : handles)
+            {
+                r_status = db->DestroyColumnFamilyHandle(handle);
+                assert(r_status.ok());
+            }
+            delete db;
+            return true;
+        }
+    }
 }
 
-// 根据client产生的随机数据生成数据库(需要数据库已经存在)
+// 根据client产生的随机数据生成数据库(需要数据库已经存在且内无数据)
 // 输入：1-多个key值 2-多个value值
 // 输出：执行结果
-void ServiceImpl::rangenDB(std::vector<std::string> &keyv, std::vector<std::string> &valuev, std::string &msg)
-{
-    rocksdb::DB *db;
-    rocksdb::Options options;
-    rocksdb::Status r_status;
-    r_status = rocksdb::DB::Open(options, DBPATH, &db);
-    rocksdb::Slice key();
-    rocksdb::Slice value();
-    // r_status = db->Put(rocksdb::WriteOptions(), key, value);
-
-    if (r_status.ok())
-    {
-        int success_num;
-        for (int i = 0; i < keyv.size(); i++)
-        {
-            rocksdb::Slice key(keyv[i]);
-            rocksdb::Slice value(valuev[i]);
-            r_status = db->Put(rocksdb::WriteOptions(), key, value);
-            if (r_status.ok())
-            {
-                msg = "Add Successfully! ";
-                success_num++;
-            }
-            else
-            {
-                msg = "Add Failed! ";
-                success_num = i;
-                break;
-            }
-        }
-        if (success_num != keyv.size())
-        {
-            msg = "Random GenerateDB broke off! Add successfully item_num is " + std::to_string(success_num) + ".";
-        }
-        else
-        {
-            msg = "Random GenerateDB successfully!";
-        }
-    }
-    else
-    {
-        msg = "No DB! Please setup a DB first! ";
-    }
-
-    delete db;
-}
-
-// 清除数据库所有数据(不删除数据库本身)
-// 输出：执行结果
-void ServiceImpl::clearDB(std::string &msg)
+void ServiceImpl::rangenDB(std::vector<std::string> &cf_name,
+                           std::vector<int> &every_cf_kv_num,
+                           std::vector<int> &keyv,
+                           std::vector<std::vector<unsigned char>> &valuev,
+                           std::string &msg)
 {
     rocksdb::DB *db;
     rocksdb::Options options;
     rocksdb::Status r_status;
 
+    rocksdb::ColumnFamilyHandle *cf;
+    // std::vector<std::string> exist_cf;
+    std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
+    std::vector<rocksdb::ColumnFamilyHandle *> handles;
+
     r_status = rocksdb::DB::Open(options, DBPATH, &db);
 
-    if (r_status.ok())
+    for (auto &&add_cf : cf_name)
     {
-        rocksdb::Iterator *it = db->NewIterator(rocksdb::ReadOptions());
-        it->SeekToFirst();
-        rocksdb::Slice start(it->key().ToString());
-        it->SeekToLast();
-        rocksdb::Slice end(it->key().ToString());
-        r_status = db->DeleteRange(rocksdb::WriteOptions(), db->DefaultColumnFamily(), start, end);
-        if (r_status.ok())
-        {
-            it->SeekToLast();
-            r_status = db->Delete(rocksdb::WriteOptions(), it->key());
-            if (r_status.ok())
-            {
-                msg = "Clear DB Successfully! ";
-            }
-            else
-            {
-                msg = "Clear Failed! ";
-            }
-        }
-        else
-        {
-            msg = "Clear Failed! ";
-        }
-        delete it;
+        r_status = db->CreateColumnFamily(rocksdb::ColumnFamilyOptions(), add_cf, &cf);
+        assert(r_status.ok());
+
+        column_families.push_back(rocksdb::ColumnFamilyDescriptor(add_cf, rocksdb::ColumnFamilyOptions()));
+
+        r_status = db->DestroyColumnFamilyHandle(cf);
+        assert(r_status.ok());
+    }
+    column_families.push_back(rocksdb::ColumnFamilyDescriptor(rocksdb::kDefaultColumnFamilyName, rocksdb::ColumnFamilyOptions()));
+    delete db;
+
+    r_status = rocksdb::DB::Open(rocksdb::DBOptions(), DBPATH, column_families, &handles, &db);
+    // std::cerr << r_status.ToString() << std::endl;
+    if (!r_status.ok())
+    {
+        msg = "Open DB Failed!";
     }
     else
     {
-        msg = "No DB! Please setup a DB first! ";
-    }
+        rocksdb::WriteBatch batch;
 
-    delete db;
+        int count = 0;
+        for (size_t i = 0; i < cf_name.size(); i++)
+        {
+            for (size_t j = 0; j < every_cf_kv_num[i]; j++)
+            {
+                char v[24];
+                for (int m = 0; m < 24; m++)
+                {
+                    v[m] = valuev[j + count][m];
+                }
+
+                rocksdb::Slice key(std::to_string(keyv[j + count]));
+                rocksdb::Slice value(v, 24);
+                batch.Put(handles[i], key, value);
+                key.clear();
+                value.clear();
+            }
+            count += every_cf_kv_num[i];
+        }
+
+        r_status = db->Write(rocksdb::WriteOptions(), &batch);
+        if (!r_status.ok())
+        {
+            msg = "GenDB Add Failed!";
+        }
+        else
+        {
+            msg = "GenDB Successfully!";
+        }
+        for (auto handle : handles)
+        {
+            r_status = db->DestroyColumnFamilyHandle(handle);
+            assert(r_status.ok());
+        }
+        delete db;
+    }
 }
 
 // 删除数据库本身

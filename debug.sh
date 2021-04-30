@@ -1,1 +1,0 @@
-sh updateprotoc.sh && make && (sh run_server.sh &);(sh openclientterminal.sh &)

@@ -1,11 +1,8 @@
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
-#include <sstream>
 
 #include <grpc++/grpc++.h>
-#include <grpc/support/log.h>
 
 #include "rpc.grpc.pb.h"
 
@@ -23,17 +20,15 @@ public:
 
     std::string Setup();
 
-    std::string Search(const bool &iskey, const std::string &key, std::vector<std::string> &re);
+    std::string Search(std::string &search_word);
 
-    std::string Add_Data(const std::string &add_key, const std::string &add_value);
+    bool Add_Data(unsigned int &add_key, unsigned char (*add_value)[24], std::string &columnfamily);
 
-    std::string Delete_Data(const bool &iskey, const std::string &del_value, std::vector<std::string> &re);
+    std::string Delete_Data(const std::string &del_cf);
 
-    std::string Show_All(std::vector<std::string> &re);
+    std::string Show_All();
 
-    std::string Random_Gen_DB(int &num, std::vector<std::string> &value);
-
-    std::string Clear();
+    std::string Random_Gen_DB(int &num);
 
     std::string Destroy();
 
@@ -42,5 +37,3 @@ private:
 };
 
 int client_operate(std::string &op);
-
-void split(const std::string &s, std::vector<std::string> &sv, const char flag);

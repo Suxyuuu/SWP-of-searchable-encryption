@@ -1,74 +1,79 @@
 syntax="proto3";
 
-// request
+// 键值对 rocksdb的存储以键值对为单元
+message kv{
+    int32 key=1;
+    repeated uint32 value=2;
+}
+
+// setup
 message SetupRequestMessage{
     string setup_request=1;
 }
-
-message SearchRequestMessage{
-    bool is_key=1;
-    string search_request=2;
-}
-
-message AddRequestMessage{
-    string add_request_key=1;
-    string add_request_value=2;
-}
-
-message DeleteRequestMessage{
-    bool is_key=1;
-    string delete_request=2;
-}
-
-message ShowAllRequestMessage{
-    string showall_request=1;
-}
-
-message RandomGenerateDBRequestMessage{
-    repeated string gen_request_key=1;
-    repeated string gen_request_value=2;
-}
-
-message ClearRequestMessage{
-    string clear_request=1;
-}
-
-message DestroyRequestMessage{
-    string destroy_request=1;
-}
-
-// response
 message SetupResponseMessage{
     string setup_response=1;
 }
 
-message SearchResponseMessage{
-    repeated string search_response=1;
+// destroy
+message DestroyRequestMessage{
+    string destroy_request=1;
+}
+message DestroyResponseMessage{
+    string destroy_response=1;
 }
 
+// add
+message AddRequestMessage{
+    int32 add_key=1;
+    repeated uint32 add_value=2;
+    string add_columnfamily=3;
+}
 message AddResponseMessage{
-    string add_response=1;
+    bool add_response=1;
 }
 
-message DeleteResponseMessage{
-    repeated string delete_response=1;
+// showall
+message ShowAllRequestMessage{
+    string showall_request=1;
 }
-
 message ShowAllResponseMessage{
-    repeated string showall_response=1;
+    repeated string showall_cf=1;
+    repeated kv showall_kv=2; 
+    repeated int32 kv_num=3;    // k-v num of every cf
+    bool showall_response=4;
 }
 
+// delete
+message DeleteRequestMessage{
+    string delete_columnfamily=2;
+}
+message DeleteResponseMessage{
+    string delete_response=1;
+}
+
+// search
+message SearchRequestMessage{
+    repeated uint32 Ki=1;
+    repeated uint32 Xi=2;
+}
+message SearchResponseMessage{
+    string search_response=1;
+    repeated string search_cf=2;
+    repeated kv search_kv=3; 
+    repeated int32 search_kv_num=4;    // k-v num of every cf
+}
+
+// todo
+// random_generate
+message RandomGenerateDBRequestMessage{
+    repeated string cf_name=1;
+    repeated kv gen_kv=2;
+    repeated int32 gen_kv_num=3;
+}
 message RandomGenerateDBResponseMessage{
     string gen_response=1;
 }
 
-message ClearResponseMessage{
-    string clear_response=1;
-}
-
-message DestroyResponseMessage{
-    string destroy_response=1;
-}
 
 
 // rpc
@@ -79,6 +84,5 @@ service RPC {
     rpc delete_data (DeleteRequestMessage) returns (DeleteResponseMessage);
     rpc show_all (ShowAllRequestMessage) returns (ShowAllResponseMessage);
     rpc RanGenDB (RandomGenerateDBRequestMessage) returns (RandomGenerateDBResponseMessage);
-    rpc ClearDB (ClearRequestMessage) returns (ClearResponseMessage);
     rpc DestroyDB (DestroyRequestMessage) returns (DestroyResponseMessage);
 }
