@@ -1,8 +1,10 @@
+[TOC]
+
 ## SWP of Searchable Encryption
 
 *编程水平有限,代码可能比较丑。*
 
-### 1. 简介
+## 1. 简介
 
 本项目为毕业设计的一部分，实现一种可搜索加密方案。
 
@@ -33,17 +35,17 @@
 
 其中`protocbuf`和`grpc`版本匹配即可
 
-+ ### RocksDB
++ ### 2.1 RocksDB
 
   参考本人写的[Ubuntu/Deepin上安装Rocksdb](https://www.jianshu.com/p/575b2e27b028)
 
-+ ### gRPC和protobuf
++ ### 2.2 gRPC和protobuf
 
   由于`gRPC`的实现依赖`protobuf`，因此这两个库可以同时安装，且建议同时安装，即使用`gRPC`源码中包含的`protobuf`源码来编译安装。
 
   具体步骤如下：
 
-  #### 下载依赖和源码
+  #### 2.2.1 下载依赖和源码
 
   ```shell
   sudo apt-get install build-essential autoconf libtool pkg-config cmake
@@ -52,7 +54,7 @@
   git submodule update --init
   ```
 
-  #### 编译安装
+  #### 2.2.2 编译安装
 
   ```shell
   // 此步骤参考grpc/BUILDING.md
@@ -72,7 +74,7 @@
   sudo make install
   ```
 
-  #### 安装结果测试
+  #### 2.2.3 安装结果测试
 
   ```shell
   cd grpc/examples/cpp/helloworld
@@ -83,7 +85,7 @@
 
   如果测试失败，查看报错信息，如果是缺少依赖，则多半因为子模块没能成功安装，前往`third_party`目录下手动安装缺少模块，安装方式与`protobuf`类似。
 
-### 3. 目录结构
+## 3. 目录结构
 
 ```
 SWP-of-searchable-encryption
@@ -116,17 +118,17 @@ SWP-of-searchable-encryption
 └── README.md				# readme
 ```
 
-### 4. 实现原理
+## 4. 实现原理
 
-+ #### 总体思路
++ ### 总体思路
 
   + 将数据划分成一个个的单词，对其进行对称加密并设置陷门后上传。查询时也会对关键词进行加密处理，防止关键词内容的泄露。整个实现过程由几个主要步骤组成（不分先后顺序）：DES加密与解密，伪随机序列的生成，带密钥的Hash函数。
     + DES加密解密：在openssl库函数的基础上实现。
     + 伪随机序列：使用C++标准库中伪随机函数来近似生成。
     + 带密钥的Hash函数：在openssl库函数的基础上实现。
 
-+ #### 加密过程
++ ### 加密过程
 
-+ #### 检索过程
++ ### 检索过程
 
-+ #### 解密过程
++ ### 解密过程
