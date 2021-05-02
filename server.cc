@@ -8,9 +8,9 @@
 #include <grpc++/server_builder.h>
 #include <grpc++/server_context.h>
 
-#include "rpc.grpc.pb.h"
+#include "protoc/rpc.grpc.pb.h"
 #include "server.h"
-#include "encryption.h"
+#include "submodule/encryption.h"
 
 #include <rocksdb/db.h>
 #include <rocksdb/slice.h>

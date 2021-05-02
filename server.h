@@ -7,7 +7,7 @@
 #include <grpc++/server_builder.h>
 #include <grpc++/server_context.h>
 
-#include "rpc.grpc.pb.h"
+#include "protoc/rpc.grpc.pb.h"
 
 #include <rocksdb/db.h>
 #include <rocksdb/slice.h>
@@ -17,7 +17,7 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 
-const std::string DBPATH = "/home/suu/Documents/rocksdbtemp"; //rocksDB的数据存储目录绝对路径
+const std::string DBPATH = "rocksdb-data"; //rocksDB的数据存储目录绝对路径
 
 class ServiceImpl final : public RPC::Service
 {

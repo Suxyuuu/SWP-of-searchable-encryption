@@ -11,10 +11,10 @@ CC = g++
  
 all: client server
  
-client:	rpc.grpc.pb.o rpc.pb.o client.o encryption.o tools.o
+client:	protoc/rpc.grpc.pb.o protoc/rpc.pb.o client.o submodule/encryption.o submodule/tools.o
 	$(CC) $^ -L/usr/local/lib `pkg-config --libs grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -lprotobuf -lpthread -lrocksdb -ldl -lssl -o $@
  
-server:	rpc.grpc.pb.o rpc.pb.o server.o encryption.o tools.o
+server:	protoc/rpc.grpc.pb.o protoc/rpc.pb.o server.o submodule/encryption.o submodule/tools.o
 	$(CC) $^ -L/usr/local/lib `pkg-config --libs grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -lprotobuf -lpthread -lrocksdb -ldl -lssl -o $@
 #chmod 777 $@
 

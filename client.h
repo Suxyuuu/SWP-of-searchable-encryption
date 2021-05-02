@@ -4,7 +4,7 @@
 
 #include <grpc++/grpc++.h>
 
-#include "rpc.grpc.pb.h"
+#include "protoc/rpc.grpc.pb.h"
 
 using grpc::Channel;
 using grpc::ClientAsyncResponseReader;

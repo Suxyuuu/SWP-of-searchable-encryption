@@ -7,10 +7,10 @@
 #include <grpc++/grpc++.h>
 #include <grpc/support/log.h>
 
-#include "rpc.grpc.pb.h"
+#include "protoc/rpc.grpc.pb.h"
 #include "client.h"
-#include "encryption.h"
-#include "tools.h"
+#include "submodule/encryption.h"
+#include "submodule/tools.h"
 
 using grpc::Channel;
 using grpc::ClientAsyncResponseReader;
