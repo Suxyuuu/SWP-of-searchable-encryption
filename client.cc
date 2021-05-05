@@ -290,32 +290,40 @@ std::string Client::Show_All()
         {
             int num = 0;
             int count = 0;
+
             for (size_t i = 0; i < cf.size(); i++)
             {
                 std::cout << "COLUMNFAMILY NAME: " << cf[i] << ":" << std::endl;
                 num = kv_num[i];
-                for (size_t j = 0; j < num; j++)
+                if (num == 0)
                 {
-                    std::cout << key[j + count] << " : ";
-                    for (size_t m = 0; m < 24; m++)
-                    {
-                        printf("%02x", value[j + count][m]);
-                    }
-                    std::cout << std::endl;
-
-                    // jiemi
-                    std::string const_ecb_key = "ecb_key";
-                    std::string const_hash_key = "hash_key";
-                    unsigned char word[20];
-                    unsigned char encode[24];
-                    std::cout << "Encode the value: ";
-                    for (size_t a = 0; a < 24; a++)
-                    {
-                        encode[a] = value[j + count][a];
-                    }
-                    decode_swp(encode, const_ecb_key, const_hash_key, key[j + count], &word);
-                    printf("%s\n", word);
+                    std::cout << "null" << std::endl;
                 }
+                else
+                {
+                    for (size_t j = 0; j < num; j++)
+                    {
+                        std::cout << "  " << key[j + count] << " : ";
+                        for (size_t m = 0; m < 24; m++)
+                        {
+                            printf("%02x", value[j + count][m]);
+                        }
+
+                        // jiemi
+                        std::string const_ecb_key = "ecb_key";
+                        std::string const_hash_key = "hash_key";
+                        unsigned char word[20];
+                        unsigned char encode[24];
+                        std::cout << " ==> ";
+                        for (size_t a = 0; a < 24; a++)
+                        {
+                            encode[a] = value[j + count][a];
+                        }
+                        decode_swp(encode, const_ecb_key, const_hash_key, key[j + count], &word);
+                        printf("%s\n", word);
+                    }
+                }
+
                 count += num;
             }
         }
@@ -407,48 +415,82 @@ std::string Client::Destroy()
     }
 }
 
+void showhelp()
+{
+    std::cout << "==================================================================" << std::endl;
+    std::cout << "   setup                   # 建立一个数据库：当且仅当数据库不存    " << std::endl;
+    std::cout << "                             在的情况下使用，该命令仅建立数据库    " << std::endl;
+    std::cout << "                             并无数据存入                      " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   rangen [n]              # 随机生成n个具有不同内容的列族来初     " << std::endl;
+    std::cout << "                             始化数据库：每个列族中的数据均加密    " << std::endl;
+    std::cout << "                             并已经插入到数据库中 当且仅当数据     " << std::endl;
+    std::cout << "                             库内无数据的情况下可以使用           " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   search [value]          # 查询某个value值：输入明文 返回该     " << std::endl;
+    std::cout << "                             值所在列族的所有数据                " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   add [key] [value] [cf]  # 向某个列族中插入一个键值对：[key]    " << std::endl;
+    std::cout << "                             为正整数 [value]为明文字符 [cf]    " << std::endl;
+    std::cout << "                             可省略 若省略将插入到默认列族        " << std::endl;
+    std::cout << "                             注意：默认列族不建议使用             " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   delete [cf]             # 删除某个列族：不可删除默认列族       " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   show                    # 输出数据库内所有数据：包括列族名      " << std::endl;
+    std::cout << std::endl;
+    std::cout << "   destroy                 # 清除数据库：彻底删除数据库中的数据    " << std::endl;
+    std::cout << "                             及其本身 再次使用需先执行setup命令  " << std::endl;
+    std::cout << "==================================================================" << std::endl;
+}
+
 // 客户端操作指令处理 0--quit 1--setup 2--search 3--add 4--delete 5--showall 负值 error
 int client_operate(std::string &op)
 {
     if (op == "quit")
     {
-        std::cout << "Client Shutdown." << std::endl;
+        std::cout << "Client Closed." << std::endl;
         return 0;
     }
     else if (op == "setup")
     {
-        std::cout << "Setup-ing..." << std::endl;
+        std::cout << "Building... " << std::endl;
         return 1;
     }
     else if (op == "search")
     {
-        std::cout << "Search-ing..." << std::endl;
+        std::cout << "Searching..." << std::endl;
         return 2;
     }
     else if (op == "add")
     {
-        std::cout << "Add-ing..." << std::endl;
+        std::cout << "Adding..." << std::endl;
         return 3;
     }
     else if (op == "delete")
     {
-        std::cout << "Delete-ing..." << std::endl;
+        std::cout << "Deleting..." << std::endl;
         return 4;
     }
     else if (op == "show")
     {
-        std::cout << "Get_data-ing..." << std::endl;
+        std::cout << "Getting..." << std::endl;
         return 5;
     }
     else if (op == "rangen")
     {
-        std::cout << "Random_Generate_DB-ing..." << std::endl;
+        std::cout << "Generating..." << std::endl;
         return 6;
     }
     else if (op == "destroy")
     {
-        std::cout << "Destroy_DB-ing..." << std::endl;
+        std::cout << "Destroying..." << std::endl;
         return 7;
+    }
+    else if (op == "help")
+    {
+        showhelp();
+        return 8;
     }
 
     else
@@ -458,8 +500,11 @@ int client_operate(std::string &op)
     }
 }
 
-int main(int argc, char **argv)
+void runclient()
 {
+    std::cout << "Welcome! You can input 'help' for more information about instructions." << std::endl;
+
+    // showhelp();
     Client client(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
 
     std::string operation;
@@ -468,8 +513,9 @@ int main(int argc, char **argv)
     std::string reply;
 
     std::vector<std::string> re;
-
-    while (std::cout << "> ", getline(std::cin, operation))
+    while (std::cout << std::endl
+                     << "ValidUser > $ ",
+           getline(std::cin, operation))
     {
 
         split(operation, operation_splited, ' ');
@@ -562,6 +608,11 @@ int main(int argc, char **argv)
             ;
         }
     }
+}
+
+int main(int argc, char **argv)
+{
+    runclient();
 
     return 0;
 }

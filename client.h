@@ -37,3 +37,7 @@ private:
 };
 
 int client_operate(std::string &op);
+
+void runclient();
+
+void showhelp();
